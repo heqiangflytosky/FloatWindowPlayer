@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/close_bar_container1"
+              android:layout_width="fill_parent"
+              android:layout_height="88dip"
+              android:layout_weight="0"
+              android:layout_gravity="bottom"
+              android:clickable="false"
+              android:gravity="center"
+              android:background="#80ff0000">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/close_bar"
+
+        android:clickable="false"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="center"
+            android:src="@mipmap/ic_launcher"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="14.4sp"
+            android:textStyle="bold"
+            android:textColor="#ffffff"
+            android:text="This is Test!"
+            />
+
+    </LinearLayout>
+</LinearLayout>

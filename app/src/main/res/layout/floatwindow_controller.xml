@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:meizu="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <RelativeLayout android:id="@+id/float_window_btn_controll_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/float_window_btn_controll_layout_height"
+        android:background="#9A000000"
+        android:layout_alignParentBottom="true">
+
+        <ImageView
+            android:id="@+id/close_float_window"
+            android:layout_width="@dimen/float_window_btn_controll_layout_height"
+            android:layout_height="@dimen/float_window_btn_controll_layout_height"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/float_window_btn_controll_layout_left_margin"
+            android:scaleType="center"
+            android:src="@drawable/video_btn_float_back" />
+
+        <ImageView
+            android:id="@+id/float_play_pause"
+            android:layout_width="@dimen/float_window_btn_controll_layout_height"
+            android:layout_height="@dimen/float_window_btn_controll_layout_height"
+            android:layout_centerInParent="true"
+            android:scaleType="center"
+            android:src="@drawable/video_btn_float_pause" />
+
+        <ImageView
+            android:id="@+id/float_to_fullscreen"
+            android:layout_width="@dimen/float_window_btn_controll_layout_height"
+            android:layout_height="@dimen/float_window_btn_controll_layout_height"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/float_window_btn_controll_layout_right_margin"
+            android:scaleType="center"
+            android:src="@drawable/video_btn_float_switch_fullscreen" />
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:id="@+id/float_loading_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" >
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/media_progress_container_loading_radius"
+            style="?android:attr/progressBarStyleLarge"/>
+    </RelativeLayout>
+</RelativeLayout>

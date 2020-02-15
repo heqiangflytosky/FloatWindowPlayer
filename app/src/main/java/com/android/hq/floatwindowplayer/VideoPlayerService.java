@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.os.Build;
 import android.os.IBinder;
 import android.view.Gravity;
 import android.view.View;
@@ -58,9 +59,15 @@ public class VideoPlayerService extends Service implements IServiceHelper {
 
         wmParams = new WindowManager.LayoutParams();
         mWindowManager = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-        //设置TYPE_PHONE，需要申请android.permission.SYSTEM_ALERT_WINDOW权限
-        //TYPE_TOAST同样可以实现悬浮窗效果，不需要申请其他权限
-        wmParams.type = WindowManager.LayoutParams.TYPE_TOAST;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            wmParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        } else {
+            //设置TYPE_PHONE，需要申请android.permission.SYSTEM_ALERT_WINDOW权限
+            //TYPE_TOAST同样可以实现悬浮窗效果，不需要申请其他权限
+            wmParams.type = WindowManager.LayoutParams.TYPE_TOAST;
+            wmParams.token = mFloatPlayerUI.getApplicationWindowToken();
+        }
         wmParams.format = PixelFormat.RGBA_8888;
         wmParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
                 | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
@@ -74,7 +81,6 @@ public class VideoPlayerService extends Service implements IServiceHelper {
         wmParams.x = (width - wmParams.width) / 2;
         wmParams.y = (height - wmParams.height) / 2;
         wmParams.alpha = 1.0f;
-        wmParams.token = mFloatPlayerUI.getApplicationWindowToken();
         mWindowManager.addView(mFloatPlayerUI, wmParams);
     }
 

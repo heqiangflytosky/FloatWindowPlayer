@@ -77,7 +77,7 @@ public class FloatPlayerUI extends FrameLayout implements IMediaPlayer{
         public void surfaceCreated(SurfaceHolder surfaceHolder) {
             mMediaPlayer.setDisplay(surfaceHolder);
             try {
-                mMediaPlayer.setDataSource("http://172.17.136.102/heqiang/test.mp4");
+                mMediaPlayer.setDataSource(Constants.VIDEO_URL);
                 mMediaPlayer.prepareAsync();
                 mController.showLoading();
             } catch (IOException e) {

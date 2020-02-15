@@ -124,7 +124,9 @@ public class FloatPlayerUI extends FrameLayout implements IMediaPlayer{
         public void onVideoSizeChanged(MediaPlayer mediaPlayer, int width, int height) {
             Log.e("Test", "onVideoSizeChanged width = " + width + ", height=" + height);
             //updateVideoSize(mediaPlayer.getVideoWidth(), mediaPlayer.getVideoHeight());
-            updateVideoSize(width, height);
+            int playerWidth = mContext.getResources().getDimensionPixelSize(R.dimen.float_window_root_width);
+            int playerHeight = mContext.getResources().getDimensionPixelSize(R.dimen.float_window_root_height);
+            Utils.updateVideoSize(mContext, mSurfaceView,width, height, playerWidth, playerHeight);
         }
     };
 
@@ -170,29 +172,5 @@ public class FloatPlayerUI extends FrameLayout implements IMediaPlayer{
 
     public void exitFloatWindow(){
 
-    }
-
-    public void updateVideoSize(int width, int height){
-        if(mContext == null || mSurfaceView == null)
-            return;
-        int playerWidth = mContext.getResources().getDimensionPixelSize(R.dimen.float_window_root_width);
-        int playerHeight = mContext.getResources().getDimensionPixelSize(R.dimen.float_window_root_height);
-        int videoWidth = ViewGroup.LayoutParams.MATCH_PARENT;
-        int videoHeight = ViewGroup.LayoutParams.MATCH_PARENT;
-        if(width>0 && height>0){
-            float videoAspect = ((float)width)/height;
-            float playerAspect = ((float)playerWidth)/playerHeight;
-            if(videoAspect > playerAspect){
-                videoWidth = playerWidth;
-                videoHeight = (int)(playerWidth * (1/videoAspect));
-            }else{
-                videoWidth = (int)(playerHeight * videoAspect);
-                videoHeight = playerHeight;
-            }
-        }
-        ViewGroup.LayoutParams lp = mSurfaceView.getLayoutParams();
-        lp.height=videoHeight;
-        lp.width=videoWidth;
-        mSurfaceView.requestLayout();
     }
 }

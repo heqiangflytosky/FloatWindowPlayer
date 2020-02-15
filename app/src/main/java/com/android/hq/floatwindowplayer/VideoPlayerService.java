@@ -18,7 +18,6 @@ public class VideoPlayerService extends Service implements IServiceHelper {
     public static FloatPlayerUI mFloatPlayerUI;
     public static WindowManager mWindowManager = null;
     public static WindowManager.LayoutParams wmParams = null;
-    private FloatPlayerController mFloatLayout;
     @Override
     public IBinder onBind(Intent intent) {
         return null;

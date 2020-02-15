@@ -1,10 +1,13 @@
 package com.android.hq.floatwindowplayer;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.android.hq.floatwindowplayer.textureview.TextureVideoActivity;
 
 public class MainActivity extends Activity {
 
@@ -36,7 +39,14 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void startPlay(View v){
+
+    public void startPlaySurfaceView(View view) {
         VideoPlayerService.startService(this);
+    }
+
+    public void startPlayTextureView(View view) {
+        Intent intent = new Intent();
+        intent.setClass(this, TextureVideoActivity.class);
+        startActivity(intent);
     }
 }

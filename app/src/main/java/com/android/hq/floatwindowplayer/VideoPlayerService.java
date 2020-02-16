@@ -15,7 +15,8 @@ import android.widget.RelativeLayout;
 
 public class VideoPlayerService extends Service implements IServiceHelper {
     private static Activity mActivity;
-    public static FloatPlayerUI mFloatPlayerUI;
+    public static View mFloatPlayerUI;
+    public static IFloatPlayer mFloatPlayer;
     public static WindowManager mWindowManager = null;
     public static WindowManager.LayoutParams wmParams = null;
     @Override
@@ -27,7 +28,8 @@ public class VideoPlayerService extends Service implements IServiceHelper {
     public void onCreate() {
         super.onCreate();
 
-        initWindowFloatView();
+        FloatPlayerUI floatPlayerUI= new FloatPlayerUI(mActivity,this);
+        initWindowFloatView(floatPlayerUI,floatPlayerUI);
     }
 
     @Override
@@ -46,11 +48,12 @@ public class VideoPlayerService extends Service implements IServiceHelper {
         super.onDestroy();
     }
 
-    public void initWindowFloatView() {
+    public void initWindowFloatView(View floatView,IFloatPlayer floatPlayer) {
+        mFloatPlayer = floatPlayer;
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 getResources().getDimensionPixelSize(R.dimen.float_window_root_width),
                 getResources().getDimensionPixelSize(R.dimen.float_window_root_height));
-        mFloatPlayerUI = new FloatPlayerUI(mActivity,this);
+        mFloatPlayerUI = floatView;
         mFloatPlayerUI.setLayoutParams(params);
         mFloatPlayerUI.setBackgroundColor(Color.BLACK);
         mFloatPlayerUI.setSystemUiVisibility(
@@ -93,16 +96,19 @@ public class VideoPlayerService extends Service implements IServiceHelper {
     }
 
     public static void stopService(Activity activity){
-        if(activity == null)
+        if(activity == null) {
             return;
+        }
         Intent mIntent = new Intent(activity, VideoPlayerService.class);
         activity.stopService(mIntent);
     }
 
     @Override
     public void closeFloatWindow() {
+        if (mFloatPlayer != null) {
+            mFloatPlayer.exitFloatWindow();
+        }
         if(mFloatPlayerUI != null){
-            mFloatPlayerUI.exitFloatWindow();
             if(mFloatPlayerUI.isAttachedToWindow()){
                 mWindowManager.removeView(mFloatPlayerUI);
                 mFloatPlayerUI = null;

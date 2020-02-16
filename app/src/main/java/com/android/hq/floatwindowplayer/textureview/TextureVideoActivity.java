@@ -1,7 +1,6 @@
 package com.android.hq.floatwindowplayer.textureview;
 
 import android.app.Activity;
-import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
 import android.os.Bundle;

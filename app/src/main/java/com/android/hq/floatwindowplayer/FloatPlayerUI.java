@@ -14,7 +14,7 @@ import android.widget.RelativeLayout;
 
 import java.io.IOException;
 
-public class FloatPlayerUI extends FrameLayout implements IMediaPlayer{
+public class FloatPlayerUI extends FrameLayout implements IMediaPlayer, IFloatPlayer{
     public final static String TAG="FloatPlayerUI";
     private Context mContext;
     private FloatPlayerController mController;
@@ -170,6 +170,7 @@ public class FloatPlayerUI extends FrameLayout implements IMediaPlayer{
         return mMediaPlayer.isPlaying();
     }
 
+    @Override
     public void exitFloatWindow(){
 
     }

@@ -14,21 +14,21 @@ import android.widget.RelativeLayout;
 
 import java.io.IOException;
 
-public class FloatPlayerUI extends FrameLayout implements IMediaPlayer, IFloatPlayer{
+abstract public class FloatPlayerUI extends FrameLayout implements IMediaPlayer, IFloatPlayer{
     public final static String TAG="FloatPlayerUI";
-    private Context mContext;
-    private FloatPlayerController mController;
-    private SurfaceView mSurfaceView;
-    private MediaPlayer mMediaPlayer;
-    private SurfaceHolder mSurfaceHolder;
+    protected Context mContext;
+    protected FloatPlayerController mController;
+    protected MediaPlayer mMediaPlayer;
     private IServiceHelper mServiceHelper;
     public FloatPlayerUI(Context context, IServiceHelper helper) {
         super(context);
         mContext = context;
         mServiceHelper = helper;
+    }
 
+    protected void init() {
         initMediaPlayer();
-        initSurfaceView();
+        initVideoContentView();
         initController();
     }
 
@@ -43,25 +43,6 @@ public class FloatPlayerUI extends FrameLayout implements IMediaPlayer, IFloatPl
         mMediaPlayer.setOnInfoListener(mOnInfoListener);
     }
 
-    private void initSurfaceView(){
-        mSurfaceView = new SurfaceView(mContext);
-        FrameLayout.LayoutParams surfaceViewParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        surfaceViewParams.gravity = Gravity.CENTER;
-        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
-                getResources().getDimensionPixelSize(R.dimen.float_window_root_width),
-                getResources().getDimensionPixelSize(R.dimen.float_window_root_height),
-                Gravity.CENTER);
-        mSurfaceView.setLayoutParams(lp);
-        if (mSurfaceView.getParent() == null) {
-            removeAllViews();
-            addView(mSurfaceView, surfaceViewParams);
-        }
-
-        mSurfaceHolder = mSurfaceView.getHolder();
-        mSurfaceHolder.addCallback(mCallback);
-        mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-    }
-
     private void initController(){
         mController = new FloatPlayerController(mContext, this);
         RelativeLayout.LayoutParams controllParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -71,30 +52,6 @@ public class FloatPlayerUI extends FrameLayout implements IMediaPlayer, IFloatPl
         }
         mController.setVisibility(View.VISIBLE);
     }
-
-    private SurfaceHolder.Callback mCallback = new SurfaceHolder.Callback() {
-        @Override
-        public void surfaceCreated(SurfaceHolder surfaceHolder) {
-            mMediaPlayer.setDisplay(surfaceHolder);
-            try {
-                mMediaPlayer.setDataSource(Constants.VIDEO_URL);
-                mMediaPlayer.prepareAsync();
-                mController.showLoading();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        @Override
-        public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-
-        }
-    };
 
     private MediaPlayer.OnCompletionListener mOnCompletionListener = new MediaPlayer.OnCompletionListener() {
         @Override
@@ -126,7 +83,7 @@ public class FloatPlayerUI extends FrameLayout implements IMediaPlayer, IFloatPl
             //updateVideoSize(mediaPlayer.getVideoWidth(), mediaPlayer.getVideoHeight());
             int playerWidth = mContext.getResources().getDimensionPixelSize(R.dimen.float_window_root_width);
             int playerHeight = mContext.getResources().getDimensionPixelSize(R.dimen.float_window_root_height);
-            Utils.updateVideoSize(mContext, mSurfaceView,width, height, playerWidth, playerHeight);
+            Utils.updateVideoSize(mContext, getVideoContentView(),width, height, playerWidth, playerHeight);
         }
     };
 
@@ -174,4 +131,7 @@ public class FloatPlayerUI extends FrameLayout implements IMediaPlayer, IFloatPl
     public void exitFloatWindow(){
 
     }
+
+    abstract public View getVideoContentView();
+    abstract public void initVideoContentView();
 }

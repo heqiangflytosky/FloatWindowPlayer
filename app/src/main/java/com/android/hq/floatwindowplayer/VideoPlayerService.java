@@ -13,6 +13,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
+import com.android.hq.floatwindowplayer.surfaceview.SurfaceViewFloatPlayerUI;
+import com.android.hq.floatwindowplayer.textureview.TextureViewFloatPlayUI;
+
 public class VideoPlayerService extends Service implements IServiceHelper {
     private static Activity mActivity;
     public static View mFloatPlayerUI;
@@ -27,9 +30,6 @@ public class VideoPlayerService extends Service implements IServiceHelper {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        FloatPlayerUI floatPlayerUI= new FloatPlayerUI(mActivity,this);
-        initWindowFloatView(floatPlayerUI,floatPlayerUI);
     }
 
     @Override
@@ -40,6 +40,22 @@ public class VideoPlayerService extends Service implements IServiceHelper {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
+
+        if (mFloatPlayerUI != null) {
+            removeFloatUI();
+        }
+
+        FloatPlayerUI floatPlayerUI = null;
+        int type = intent.getIntExtra(Constants.INTENT_ARGS_WINDOW_TYPE, 0);
+        if (Constants.WINDOW_TYPE_SV == type) {
+            floatPlayerUI = new SurfaceViewFloatPlayerUI(mActivity, this);
+        } else {
+            floatPlayerUI = new TextureViewFloatPlayUI(mActivity,this);
+        }
+        if (floatPlayerUI != null) {
+            initWindowFloatView(floatPlayerUI, floatPlayerUI);
+        }
+
         return START_NOT_STICKY;
     }
 
@@ -86,10 +102,11 @@ public class VideoPlayerService extends Service implements IServiceHelper {
         mWindowManager.addView(mFloatPlayerUI, wmParams);
     }
 
-    public static void startService(Activity activity){
+    public static void startService(Activity activity, int windowType){
         mActivity = activity;
         if(mActivity != null){
             Intent mIntent = new Intent(mActivity, VideoPlayerService.class);
+            mIntent.putExtra(Constants.INTENT_ARGS_WINDOW_TYPE, windowType);
             mIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             mActivity.startService(mIntent);
         }
@@ -105,6 +122,11 @@ public class VideoPlayerService extends Service implements IServiceHelper {
 
     @Override
     public void closeFloatWindow() {
+        removeFloatUI();
+        stopSelf();
+    }
+
+    private void removeFloatUI() {
         if (mFloatPlayer != null) {
             mFloatPlayer.exitFloatWindow();
         }
@@ -114,6 +136,5 @@ public class VideoPlayerService extends Service implements IServiceHelper {
                 mFloatPlayerUI = null;
             }
         }
-        stopSelf();
     }
 }

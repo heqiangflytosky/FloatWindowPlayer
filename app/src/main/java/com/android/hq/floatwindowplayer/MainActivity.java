@@ -7,6 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.android.hq.floatwindowplayer.surfaceview.SurfaceViewVideoActivity;
+import com.android.hq.floatwindowplayer.textureview.TextureVideo2Activity;
 import com.android.hq.floatwindowplayer.textureview.TextureVideoActivity;
 
 public class MainActivity extends Activity {
@@ -41,12 +43,20 @@ public class MainActivity extends Activity {
 
 
     public void startPlaySurfaceView(View view) {
-        VideoPlayerService.startService(this);
+        Intent intent = new Intent();
+        intent.setClass(this, SurfaceViewVideoActivity.class);
+        startActivity(intent);
     }
 
     public void startPlayTextureView(View view) {
         Intent intent = new Intent();
         intent.setClass(this, TextureVideoActivity.class);
+        startActivity(intent);
+    }
+
+    public void startPlayTextureViewFloat(View view) {
+        Intent intent = new Intent();
+        intent.setClass(this, TextureVideo2Activity.class);
         startActivity(intent);
     }
 }
